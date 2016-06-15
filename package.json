@@ -20,6 +20,7 @@
   "contributors": [],
   "dependencies": {
     "express": "^4.13.4",
+    "util": "^0.10.3",
     "ws": "^1.1.0"
   },
   "devDependencies": {
