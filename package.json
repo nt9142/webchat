@@ -1,0 +1,42 @@
+{
+  "name": "webchat",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "export NODE_PATH=. && node app",
+    "debug": "export NODE_PATH=. && node app --debug",
+    "win-start": "set NODE_PATH=.& node app",
+    "win-debug": "set NODE_PATH=.& node app --debug",
+    "build": "gulp",
+    "build-debug": "gulp --debug"
+  },
+  "keywords": [
+    "chat",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "nt9142",
+  "contributors": [],
+  "dependencies": {
+    "express": "^4.13.4",
+    "ws": "^1.1.0"
+  },
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-flatten": "^0.2.0",
+    "gulp-inject": "^4.1.0",
+    "gulp-less": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-uglifycss": "^1.0.6",
+    "pug": "^2.0.0-beta3",
+    "run-sequence": "^1.2.1",
+    "stream-series": "^0.1.1",
+    "through2": "^2.0.1",
+    "yargs": "^4.7.1"
+  }
+}
