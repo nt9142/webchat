@@ -5,14 +5,10 @@
 	var Message = function (params) {
 		Message.super_.apply(this, arguments);
 		
-		var isSuccess = params.isSuccess !== undefined ? params.isSuccess : true;
-
-
 		this.set('sender', params.sender);
-		this.set('type', params.type);
-		this.set('style', params.style || 'default');
+		this.set('style', params.style || []);
 		this.set('text', params.text);
-		this.set('isSuccess', isSuccess);
+		this.set('timestamp', Date.now());
 		
 		this.setIndirectly('recipients', params.recipients);
 	};

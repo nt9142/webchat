@@ -2,72 +2,74 @@
 (function () {
 	var Data = require('src/node/data'),
 			UserManager = function () {
-				this._users = {};
+				this._users = [];
 			};
 	Object.assign(UserManager.prototype, {
-		addUser: function (guid, instance) {
-			if (!this.getUser(guid)) {
-				this._users[guid] = new Data.User(guid, instance);
-			}
-		},
-		registerUser: function (user, nickname) {
-			if (user.get('isRegistered')) {
-				return UserManager.ALREADY_REGISTERED;
+		authUser: function (nick, instance) {
+			var user;
+
+			if (!nick) {
+				return UserManager.WRONG_DATA;
 			}
 
-			if (this.setUserNickname(user, nickname)) {
-				user.set('isRegistered', true);
+			user = this.getUserByNick(nick);
+
+			if (this.getUser(instance)) {
+				return UserManager.ALREADY_AUTHORIZED;
+			}
+
+			if (!user) {
+				this._addUser(nick, instance);
 				return true;
 			}
 
-			return UserManager.NICK_IS_BUSY;
-		},
-		getUser: function (guid) {
-			return this._users[guid] || false;
-		},
-		allUsers: function () {
-			var keys = Object.keys(this._users),
-					result = [];
-
-			for (var i = 0; i < keys.length; i++) {
-				result.push(this._users[keys[i]]);
+			if (user.get('isOnline')) {
+				return UserManager.NICK_USED;
 			}
 
-			return result;
-		},
-		getList: function () {
-			var key, result = [];
-			for (key in this._users) {
-				if (this._users.hasOwnProperty(key)) {
-					result.push(this._users[key].data());
-				}
-			}
-			return result;
-		},
-		setUserNickname: function (user, nickname) {
-			if (this._isNicknameExists(nickname)) {
-				return false;
-			}
-			user.set('nickname', nickname);
+			user.updateInstance(instance);
+			user.set('isOnline', true);
 			return true;
 		},
-		setUserOffline: function (guid) {
-			this.getUser(guid).set('isOnline', false);
+		getUser: function (instance) {
+			return this._users.find(function (user) {
+				return user.get('instance') === instance;
+			});
 		},
-		_isNicknameExists: function (nickname) {
-			var key;
-			for (key in this._users) {
-				if (this._users.hasOwnProperty(key)
-						&& this._users[key].get('nickname') === nickname) {
-					return true;
-				}
+		getUserByNick: function (nick) {
+			return this._users.find(function (user) {
+				return user.get('nickname') === nick;
+			});
+		},
+		allOnlineUsers: function () {
+			return this._users.filter(function (user) {
+				return user.get('isOnline');
+			});
+		},
+		getList: function () {
+			return this._users.map(function (user) {
+				return user.data();
+			});
+		},
+		setUserOffline: function (user) {
+			user.set('isOnline', false);
+			return user;
+		},
+		_addUser: function (nick, instance) {
+			if (!this.getUser(instance)) {
+				this._users.push(new Data.User(nick, instance));
 			}
-			return false;
+		},
+		_isNickExists: function (nick) {
+			return this._users.some(function (user) {
+				return user.get('nickname') === nick;
+			});
 		}
 	});
 
-	UserManager.ALREADY_REGISTERED = 1;
-	UserManager.NICK_IS_BUSY = 2;
+	UserManager.ALREADY_AUTHORIZED = 1;
+	UserManager.NICK_USED = 2;
+	UserManager.WRONG_DATA = 3;
 
 	module.exports = UserManager;
 })();

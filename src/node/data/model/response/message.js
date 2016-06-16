@@ -5,12 +5,8 @@
 	var MessageResponse = function (message) {
 		MessageResponse.super_.apply(this, arguments);
 
-		this.set('type', message.get('type'));
-		this.set('content', {
-			sender: message.get('sender'),
-			text: message.get('text'),
-			isSuccess: message.get('isSuccess')
-		});
+		this.set('type', 'chat');
+		this.set('content', message.data());
 	};
 
 	util.inherits(MessageResponse, Response);

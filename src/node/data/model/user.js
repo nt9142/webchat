@@ -2,19 +2,22 @@
 	var util = require('util');
 	var Model = require('./');
 
-	var User = function (guid, instance) {
+	var User = function (nick, instance) {
 		User.super_.apply(this, arguments);
 
-		this.set('guid', guid);
-		this.set('nickname', null);
+		this.set('nickname', nick);
 
-		this.set('isRegistered', false);
 		this.set('isOnline', true);
+		this.set('timestamp', Date.now());
 
-		this.setIndirectly('instance', instance);
+		this.updateInstance(instance);
 	};
 
 	util.inherits(User, Model);
+
+	User.prototype.updateInstance = function (instance) {
+		this.setIndirectly('instance', instance);
+	}
 
 	module.exports = User;
 })(module);
