@@ -10,12 +10,12 @@
 		sendChat: function (sender, body, recipients, style) {
 			this._send('chat', style, sender, body, recipients);
 		},
-		sendSystem: function (instance, type, body, isSuccess) {
+		sendSystem: function (instances, type, body, isSuccess) {
 			this._eventEmitter.emit('system', new Data.SystemMessage({
 				type: type,
 				body: body,
 				isSuccess: isSuccess,
-				instance: instance
+				instances: instances
 			}));
 		},
 		_send: function (type, style, sender, body, recipients) {

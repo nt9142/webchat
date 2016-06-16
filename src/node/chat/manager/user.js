@@ -46,9 +46,9 @@
 				return user.get('isOnline');
 			});
 		},
-		getList: function () {
-			return this._users.map(function (user) {
-				return user.data();
+		getInstancesOf: function (arr) {
+			return arr.map(function (user) {
+				return user.get('instance');
 			});
 		},
 		setUserOffline: function (user) {

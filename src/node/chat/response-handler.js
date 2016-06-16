@@ -90,10 +90,10 @@
 						state = true;
 						responseText = user;
 						break;
-					case UserManager.ALREADY_AUTHORIZED:
+					case UserManager.E_ALREADY_AUTHORIZED:
 						responseText = this.responseText.alreadyAuthorized;
 						break;
-					case UserManager.NICK_USED:
+					case UserManager.E_NICK_USED:
 						responseText = this.responseText.userOnline;
 						break;
 					default:
@@ -106,9 +106,8 @@
 				this._msgManager.sendChat(user, response.get('content'), this._onlineUsers());
 			}
 
-
 			function usersAction() {
-				this._msgManager.sendSystem(instance, 'users', this._userManager.getList());
+				this._broadcastUserList();
 			}
 
 			function messagesAction() {
@@ -143,6 +142,7 @@
 			if (user) {
 				this._userManager.setUserOffline(user);
 				this._msgManager.sendChat(user, this.responseText.goodbyeUser, this._onlineUsers(), this.resStyle.left);
+				this._broadcastUserList();
 			}
 		},
 		onMessage: function (callback) {
@@ -153,6 +153,10 @@
 		},
 		_onlineUsers: function () {
 			return this._userManager.allOnlineUsers();
+		},
+		_broadcastUserList: function () {
+			var users = this._userManager.allOnlineUsers();
+			this._msgManager.sendSystem(this._userManager.getInstancesOf(users), 'users', users);
 		}
 	});
 

@@ -5,13 +5,19 @@
 	var SystemMessage = function (params) {
 		SystemMessage.super_.apply(this, arguments);
 
-		var isSuccess = params.isSuccess !== undefined ? params.isSuccess : true;
+		var isSuccess = params.isSuccess !== undefined ? params.isSuccess : true,
+				instances = params.instances;
 
 		this.set('type', params.type);
 		this.set('body', params.body);
 		this.set('isSuccess', isSuccess);
 
-		this.setIndirectly('instance', params.instance);
+
+		if (Object.prototype.toString.call(instances) !== '[object Array]') {
+			instances = [instances];
+		}
+
+		this.setIndirectly('instances', instances);
 	};
 
 	util.inherits(SystemMessage, Model);

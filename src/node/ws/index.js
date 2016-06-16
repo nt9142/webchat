@@ -45,19 +45,21 @@
 			}
 		},
 		_onSystemHandler: function (systemMessage) {
-			var instance = systemMessage.get('instance'),
+			var instances = systemMessage.get('instances'),
 					response = JSON.stringify(new Data.SystemResponse(systemMessage).data());
-			instance.send(response);
-			
+			instances.forEach(function (instance) {
+				instance.send(response);
+			});
+
 			this.debugLog('sys response: ' + response);
 		},
 		_onMessageHandler: function (message) {
 			var recipients = message.get('recipients'),
-					response = JSON.stringify(new Data.MessageResponse(message).data()), key;
+					response = JSON.stringify(new Data.MessageResponse(message).data());
 
-			for (key in recipients) {
-				recipients[key].get('instance').send(response);
-			}
+			recipients.forEach(function (recipient) {
+				recipient.get('instance').send(response);
+			});
 
 			this.debugLog('response: ' + response);
 		}
