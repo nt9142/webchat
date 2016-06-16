@@ -66,7 +66,7 @@
 
 			function chatAction() {
 				if (user.get('nickname')) {
-					this._msgManager.sendChat(user, response.get('content'));
+					this._msgManager.sendChat(user, response.get('content'), this._userManager.allUsers());
 				} else {
 					this._msgManager.sendSystem('auth', user, this.responseText.noNickname, [user], false);
 				}
@@ -77,7 +77,7 @@
 						responseText;
 				if (registerState === true) {
 					this._msgManager.sendSystem('auth', user, this.responseText.nicknameChanged, [user], true);
-					this._msgManager.sendSystem('chat', user, this.responseText.greetingsNewUser);
+					this._msgManager.sendSystem('chat', user, this.responseText.greetingsNewUser, this._userManager.allUsers());
 				} else {
 					responseText = registerState === UserManager.ALREADY_REGISTERED
 							? this.responseText.alreadyRegistered

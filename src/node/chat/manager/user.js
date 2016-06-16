@@ -19,16 +19,21 @@
 				user.set('isRegistered', true);
 				return true;
 			}
-			
+
 			return UserManager.NICK_IS_BUSY;
 		},
 		getUser: function (guid) {
 			return this._users[guid] || false;
 		},
-		getUserInstances: function () {
-			return this._users.map(function (user) {
-				return user.get('instance');
-			});
+		allUsers: function () {
+			var keys = Object.keys(this._users),
+					result = [];
+
+			for (var i = 0; i < keys.length; i++) {
+				result.push(this._users[keys[i]]);
+			}
+
+			return result;
 		},
 		getList: function () {
 			var key, result = [];
