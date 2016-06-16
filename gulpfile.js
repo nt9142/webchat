@@ -48,7 +48,7 @@
 		return gulp.src(paths.src)
 				.pipe(filter('**/*.js'))
 				.pipe(concat(paths.concatjs))
-				.pipe(uglify({preserveComments: 'license'}))
+				.pipe(uglify({preserveComments: 'license', mangle: false}))
 				.pipe(gulp.dest(paths.dest));
 	});
 
