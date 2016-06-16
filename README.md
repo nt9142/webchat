@@ -12,7 +12,7 @@ $ npm run build
 ```
 ### Starting the npm project
 ```sh
-$ npm start # if you use linux and mac
+$ npm start # if you use linux or mac
 $ npm run win-start # if you use windows
 ```
 
@@ -24,7 +24,7 @@ $ npm run build-debug
 ```
 ### Starting npm project for debugging the source code
 ```sh
-$ npm run debug # if you use linux and mac
+$ npm run debug # if you use linux or mac
 $ npm run win-debug # if you use windows
 ```
 
