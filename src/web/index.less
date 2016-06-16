@@ -1,0 +1,14 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	.row {
+		
+		&:before, &:after {
+			display: table;
+			content: " ";
+		}
+
+		&:after {
+			clear: both;
+		}
+	}
+}

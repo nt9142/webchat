@@ -1,0 +1,30 @@
+.message {
+	.message-item {
+		padding: 5px 0;
+		.nickname:after {
+			content: ': ';
+		}
+
+		.text {
+			white-space: pre;
+		}
+
+		&.own {
+			color: #007aad;
+		}
+
+		&.system {
+			color: #b2b2b2;
+			font-style: italic;
+
+			.nickname:after {
+				content: ' ';
+			}
+
+			&.joined {
+				color: #00ad00;
+			}
+		}
+
+	}
+}
