@@ -1,4 +1,4 @@
-# WebChat app
+# WebChat
 ## Install the app
 ```sh
 npm install
