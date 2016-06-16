@@ -9,27 +9,27 @@
 			var user;
 
 			if (!nick) {
-				return UserManager.WRONG_DATA;
+				return UserManager.E_WRONG_DATA;
 			}
 
 			user = this.getUserByNick(nick);
 
 			if (this.getUser(instance)) {
-				return UserManager.ALREADY_AUTHORIZED;
+				return UserManager.E_ALREADY_AUTHORIZED;
 			}
 
 			if (!user) {
 				this._addUser(nick, instance);
-				return true;
+				return UserManager.NEW_USER;
 			}
 
 			if (user.get('isOnline')) {
-				return UserManager.NICK_USED;
+				return UserManager.E_NICK_USED;
 			}
 
 			user.updateInstance(instance);
 			user.set('isOnline', true);
-			return true;
+			return UserManager.EXISTING_USER;
 		},
 		getUser: function (instance) {
 			return this._users.find(function (user) {
@@ -67,9 +67,11 @@
 		}
 	});
 
-	UserManager.ALREADY_AUTHORIZED = 1;
-	UserManager.NICK_USED = 2;
-	UserManager.WRONG_DATA = 3;
+	UserManager.E_ALREADY_AUTHORIZED = 1;
+	UserManager.E_NICK_USED = 2;
+	UserManager.E_WRONG_DATA = 3;
+	UserManager.NEW_USER = 4;
+	UserManager.EXISTING_USER = 5;
 
 	module.exports = UserManager;
 })();

@@ -7,7 +7,7 @@
 
 		this.set('type', system.get('type'));
 		this.set('content', {
-			text: system.get('text'),
+			body: system.get('body'),
 			isSuccess: system.get('isSuccess')
 		});
 	};

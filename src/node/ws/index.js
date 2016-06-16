@@ -2,8 +2,7 @@
 (function () {
 	var ws = new require('ws'),
 			Data = require('src/node/data'),
-			responseHandler = require('src/node/chat/response-handler'),
-			generateGuid = require('src/node/util/generate-guid');
+			responseHandler = require('src/node/chat/response-handler');
 	var WebSocketServer = function (port, isDebug) {
 		this.clients = {};
 		this.isDebug = isDebug;

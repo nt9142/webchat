@@ -21,14 +21,15 @@
 					alreadyAuthorized: 'User is already authorized!',
 					notRecognizedCommand: 'The command is not recognized',
 					greetingsNewUser: 'joined us!',
+					greetingsExistingUser: 'is appeared online!',
 					goodbyeUser: 'left this chat.'
 				};
-				
+
 				this.resStyle = {
 					joined: ['system', 'joined'],
 					left: ['system', 'left']
 				};
-				
+
 			};
 
 	Object.assign(ResponseHandler.prototype, {
@@ -76,24 +77,29 @@
 
 			function authAction() {
 				var registerState = this._userManager.authUser(response.get('content'), instance),
-						responseText;
-				if (registerState === true) {
-					user = this._userManager.getUser(instance);
-					this._msgManager.sendSystem(instance, 'auth', this.responseText.authorized, true);
-					this._msgManager.sendChat(user, this.responseText.greetingsNewUser, this._onlineUsers(), this.resStyle.joined);
-				} else {
-					switch (registerState) {
-						case UserManager.ALREADY_AUTHORIZED:
-							responseText = this.responseText.alreadyAuthorized;
-							break;
-						case UserManager.NICK_USED:
-							responseText = this.responseText.userOnline;
-							break;
-						default:
-							responseText = this.responseText.noNick;
-					}
-					this._msgManager.sendSystem(instance, 'auth', responseText, false);
+						responseText, chatText, state = false;
+				switch (registerState) {
+					case UserManager.NEW_USER:
+					case UserManager.EXISTING_USER:
+						user = this._userManager.getUser(instance);
+						chatText = registerState === UserManager.NEW_USER
+								? this.responseText.greetingsNewUser
+								: this.responseText.greetingsExistingUser;
+
+						this._msgManager.sendChat(user, chatText, this._onlineUsers(), this.resStyle.joined);
+						state = true;
+						responseText = user;
+						break;
+					case UserManager.ALREADY_AUTHORIZED:
+						responseText = this.responseText.alreadyAuthorized;
+						break;
+					case UserManager.NICK_USED:
+						responseText = this.responseText.userOnline;
+						break;
+					default:
+						responseText = this.responseText.noNick;
 				}
+				this._msgManager.sendSystem(instance, 'auth', responseText, state);
 			}
 
 			function chatAction() {
@@ -134,8 +140,10 @@
 		 */
 		processDisconnection: function (instance) {
 			var user = this._userManager.getUser(instance);
-			this._userManager.setUserOffline(user);
-			this._msgManager.sendChat(user, this.responseText.goodbyeUser, this._onlineUsers(), this.resStyle.left);
+			if (user) {
+				this._userManager.setUserOffline(user);
+				this._msgManager.sendChat(user, this.responseText.goodbyeUser, this._onlineUsers(), this.resStyle.left);
+			}
 		},
 		onMessage: function (callback) {
 			this._msgManager.onMessage(callback);

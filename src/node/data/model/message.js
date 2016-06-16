@@ -7,7 +7,7 @@
 		
 		this.set('sender', params.sender);
 		this.set('style', params.style || []);
-		this.set('text', params.text);
+		this.set('body', params.body);
 		this.set('timestamp', Date.now());
 		
 		this.setIndirectly('recipients', params.recipients);

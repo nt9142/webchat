@@ -7,30 +7,29 @@
 				this._eventEmitter = new EventEmitter();
 			};
 	Object.assign(MessageManager.prototype, {
-		sendChat: function (sender, text, recipients, style) {
-			this._send('chat', style, sender, text, recipients);
+		sendChat: function (sender, body, recipients, style) {
+			this._send('chat', style, sender, body, recipients);
 		},
-		sendSystem: function (instance, type, text, isSuccess) {
+		sendSystem: function (instance, type, body, isSuccess) {
 			this._eventEmitter.emit('system', new Data.SystemMessage({
 				type: type,
-				text: text,
+				body: body,
 				isSuccess: isSuccess,
 				instance: instance
 			}));
 		},
-		_send: function (type, style, sender, text, recipients) {
+		_send: function (type, style, sender, body, recipients) {
 			var message = new Data.Message({
 				sender: sender,
 				type: type,
 				style: style,
-				text: text,
+				body: body,
 				recipients: recipients
 			});
 			this._messages.push(message);
 			this._eventEmitter.emit('message', message);
 		},
 		getList: function (user) {
-			console.log('COUNT', this._messages.length);
 			return this._messages
 					.filter(function (message) {
 						return message.get('recipients').indexOf(user) !== -1 || message.get('timestamp') > user.get('timestamp');
