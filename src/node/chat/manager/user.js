@@ -10,6 +10,18 @@
 				this._users[guid] = new Data.User(guid, instance);
 			}
 		},
+		registerUser: function (user, nickname) {
+			if (user.get('isRegistered')) {
+				return UserManager.ALREADY_REGISTERED;
+			}
+
+			if (this.setUserNickname(user, nickname)) {
+				user.set('isRegistered', true);
+				return true;
+			}
+			
+			return UserManager.NICK_IS_BUSY;
+		},
 		getUser: function (guid) {
 			return this._users[guid] || false;
 		},
@@ -48,6 +60,9 @@
 			return false;
 		}
 	});
+
+	UserManager.ALREADY_REGISTERED = 1;
+	UserManager.NICK_IS_BUSY = 2;
 
 	module.exports = UserManager;
 })();

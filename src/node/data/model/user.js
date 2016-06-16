@@ -8,8 +8,9 @@
 		this.set('guid', guid);
 		this.set('nickname', null);
 
+		this.set('isRegistered', false);
 		this.set('isOnline', true);
-		
+
 		this.setIndirectly('instance', instance);
 	};
 

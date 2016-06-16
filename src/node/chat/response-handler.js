@@ -7,7 +7,7 @@
 			 * Response handler singleton
 			 */
 			ResponseHandler = function () {
-				this._messageManager = new MessageManager();
+				this._msgManager = new MessageManager();
 				this._userManager = new UserManager();
 
 
@@ -15,8 +15,11 @@
 					invalidStruct: 'Invalid message structure!',
 					noNickname: 'Specify your nickname first!',
 					nicknameChanged: 'Nickname is changed!',
-					nicknameExists: 'Nickname already exists!',
-					notRecognizedCommand: 'The command is not recognized'
+					nicknameExists: 'Nickname is already exists!',
+					alreadyRegistered: 'User is already registered!',
+					notRecognizedCommand: 'The command is not recognized',
+					greetingsNewUser: 'joined us! Yay!',
+					goodbyeUser: 'left this chat.'
 				};
 			};
 
@@ -38,40 +41,65 @@
 			}
 
 			if (!response.isValid()) {
-				this._messageManager.sendSystem(user, this.responseText.invalidStruct, [user]);
+				this._msgManager.sendSystem('error', user, this.responseText.invalidStruct, [user]);
 				return;
 			}
 
 			switch (response.get('type')) {
 				case 'chat':
-					if (user.get('nickname')) {
-						this._messageManager.sendChat(user, response.get('content'));
-					} else {
-						this._messageManager.sendSystem(user, this.responseText.noNickname, [user]);
-					}
+					chatAction.call(this);
 					break;
-
-				case 'nickname':
-					if (this._userManager.setUserNickname(user, response.get('content'))) {
-						this._messageManager.sendSystem(user, this.responseText.nicknameChanged, [user]);
-					} else {
-						this._messageManager.sendSystem(user, this.responseText.nicknameExists, [user]);
-					}
+				case 'auth':
+					authAction.call(this);
 					break;
-
 				case 'users':
-					this._messageManager.sendList(user, this._userManager.getList(), [user]);
+					usersAction.call(this);
 					break;
-
 				case 'messages':
-					if (user.get('nickname')) {
-						this._messageManager.sendList(user, this._messageManager.getList(user), [user]);
-						break;
-					}
-
-				default:
-					this._messageManager.sendSystem(user, this.responseText.notRecognizedCommand, [user]);
+					messagesAction.call(this);
 					break;
+				default:
+					defaultAction.call(this);
+					break;
+			}
+
+
+			function chatAction() {
+				if (user.get('nickname')) {
+					this._msgManager.sendChat(user, response.get('content'));
+				} else {
+					this._msgManager.sendSystem('auth', user, this.responseText.noNickname, [user], false);
+				}
+			}
+
+			function authAction() {
+				var registerState = this._userManager.registerUser(user, response.get('content')),
+						responseText;
+				if (registerState === true) {
+					this._msgManager.sendSystem('auth', user, this.responseText.nicknameChanged, [user], true);
+					this._msgManager.sendSystem('chat', user, this.responseText.greetingsNewUser);
+				} else {
+					responseText = registerState === UserManager.ALREADY_REGISTERED
+							? this.responseText.alreadyRegistered
+							: this.responseText.nicknameExists;
+					this._msgManager.sendSystem('auth', user, responseText, [user], false);
+				}
+			}
+
+			function usersAction() {
+				this._msgManager.sendSystem('users', user, this._userManager.getList(), [user]);
+			}
+
+			function messagesAction() {
+				if (user.get('nickname')) {
+					this._msgManager.sendSystem('messages', user, this._msgManager.getList(user), [user]);
+				} else {
+					this._msgManager.sendSystem('auth', user, this.responseText.noNickname, [user], false);
+				}
+			}
+
+			function defaultAction() {
+				this._msgManager.sendSystem('error', user, this.responseText.notRecognizedCommand, [user]);
 			}
 
 		},
@@ -93,9 +121,10 @@
 		 */
 		processDisconnection: function (guid) {
 			this._userManager.setUserOffline(guid);
+			this._msgManager.sendSystem('chat', this._userManager.getUser(guid), this.responseText.goodbyeUser);
 		},
 		onMessage: function (callback) {
-			this._messageManager.onMessage(callback);
+			this._msgManager.onMessage(callback);
 		}
 	});
 

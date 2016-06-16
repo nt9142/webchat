@@ -14,15 +14,6 @@
 
 		this.initBindings();
 		responseHandler.onMessage(function (message) {
-			var res = new Data.MessageResponse(message).data();
-			if(res) {
-				console.log(res.content.text);
-			}
-			
-			
-			
-			
-			
 			var recipients = message.get('recipients'),
 					response = JSON.stringify(new Data.MessageResponse(message).data()), key;
 			for (key in recipients) {

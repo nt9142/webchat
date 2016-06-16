@@ -8,20 +8,19 @@
 			};
 	Object.assign(MessageManager.prototype, {
 		sendChat: function (sender, text, recipients) {
-			this._send(MessageManager.CHAT, sender, text, recipients);
+			this._send('chat', null, sender, text, recipients);
 		},
-		sendList: function (sender, text, recipients) {
-			this._send(MessageManager.LIST, sender, text, recipients);
+		sendSystem: function (type, sender, text, recipients, isSuccess) {
+			this._send(type, 'system', sender, text, recipients, isSuccess);
 		},
-		sendSystem: function (sender, text, recipients) {
-			this._send(MessageManager.SYSTEM, sender, text, recipients);
-		},
-		_send: function (type, sender, text, recipients) {
+		_send: function (type, style, sender, text, recipients, isSuccess) {
 			var message = new Data.Message({
 				sender: sender,
 				type: type,
+				style: style,
 				text: text,
-				recipients: recipients
+				recipients: recipients,
+				isSuccess: isSuccess
 			});
 			this._messages.push(message);
 			this._eventEmitter.emit('message', message);
@@ -29,7 +28,7 @@
 		getList: function (user) {
 			return this._messages
 					.filter(function (message) {
-						return message.get('recipients').indexOf(user) !== -1;
+						return (!message.get('recipients') || message.get('recipients').indexOf(user) !== -1) && message.get('type') === 'chat' ;
 					})
 					.map(function (message) {
 						return message.data();
