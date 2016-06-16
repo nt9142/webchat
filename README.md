@@ -6,14 +6,14 @@ npm install
 
 ## Start the project
 Both commands is necessary for starting.
-### Starting the npm project
-```sh
-$ npm start #for linux and mac
-$ npm run win-start #for windows
-```
 ### Building the frontend
 ```sh
 $ npm run build
+```
+### Starting the npm project
+```sh
+$ npm start #if you use linux and mac
+$ npm run win-start #if you use windows
 ```
 
 ## Debuging
