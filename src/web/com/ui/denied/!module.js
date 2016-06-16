@@ -1,2 +1,0 @@
-/* global WSC */
-//WSC.UI = {};
