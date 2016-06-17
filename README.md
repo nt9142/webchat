@@ -31,7 +31,7 @@ $ npm run win-debug # if you use windows
 
 # Attention
 This project uses 
-[fetch](https://developer.mozilla.org/en/docs/Web/API/Fetch_API). Because of it WebChat might not work in some browsers. If you want to improve browser support you can add [fetch polyfill](https://github.com/github/fetch). But it's still working in Google Chrome without it :)
+[fetch](https://developer.mozilla.org/en/docs/Web/API/Fetch_API). Because of it WebChat might not work in some browsers. If you want to improve browser support you can add the [fetch polyfill](https://github.com/github/fetch). But it's still working in Google Chrome without it :)
 
 # Requirements
 * npm v2.14.20
