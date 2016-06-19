@@ -5,7 +5,7 @@ npm install
 ```
 
 ## Start the project
-Both commands is necessary for starting.
+Both commands are necessary for starting.
 ### Building the frontend
 ```sh
 $ npm run build
@@ -17,7 +17,7 @@ $ npm run win-start # if you use windows
 ```
 
 ## Debuging
-Both commands is necessary for debug.
+Both commands are necessary for debug.
 ### Build and Watch the source code
 ```sh
 $ npm run build-debug
