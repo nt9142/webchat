@@ -12,7 +12,7 @@ $ npm run build
 ```
 ### Starting the npm project
 ```sh
-$ npm start # if you use linux or mac
+$ npm start # if you use either linux or mac
 $ npm run win-start # if you use windows
 ```
 
