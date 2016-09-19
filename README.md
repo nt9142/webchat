@@ -1,4 +1,5 @@
 # WebChat
+WebChat is a result of successfully completed test task for 2 days.
 ## Install the app
 ```sh
 npm install
